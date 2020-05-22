@@ -7,6 +7,11 @@ const routes: Routes = [
   {
     path: 'todos',
     loadChildren: () => import('../modules/todos/todos.module').then(todoModule => todoModule.TodosModule)
+  },
+  {
+    path: '',
+    redirectTo: '',
+    pathMatch: 'full'
   }
 ];
 

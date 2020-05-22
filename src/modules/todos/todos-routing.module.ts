@@ -5,7 +5,7 @@ import { TodoDashboardComponent } from './todo-dashboard/todo-dashboard.componen
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'todos',
     component: TodoDashboardComponent
   }
 ];
@@ -13,6 +13,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forChild(routes)
-  ]
+  ],
+  exports: [RouterModule]
 })
 export class TodosRoutingModule { }
