@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TicketsGQL } from '../../../graphql/graphql-types';
 
 @Component({
   selector: 'app-todo-dashboard',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TodoDashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private ticketsGQL: TicketsGQL) { }
 
   ngOnInit(): void {
+    this.ticketsGQL.watch().valueChanges.subscribe(
+      tickets => console.log(tickets)
+    );
   }
 
 }
