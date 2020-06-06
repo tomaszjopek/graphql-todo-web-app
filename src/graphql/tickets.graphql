@@ -1,5 +1,17 @@
-query Tickets  {
-        tickets {
-        id
-      }
+query TicketsByState {
+   done: ticketsByState(state: DONE) {
+          id
+          title
+          description
+        }
+     todo: ticketsByState(state: TODO) {
+          id
+          title
+          description
+        }
+     in_progress: ticketsByState(state: IN_PROGRESS) {
+          id
+          title
+          description
+        }
 }

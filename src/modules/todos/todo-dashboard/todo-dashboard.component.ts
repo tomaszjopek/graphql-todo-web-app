@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TicketsGQL } from '../../../graphql/graphql-types';
+import { Ticket, TicketsByStateGQL, TicketsByStateQuery } from '../../../graphql/graphql-types';
+import { Observable } from 'rxjs';
+import { ApolloQueryResult } from 'apollo-client';
 
 @Component({
   selector: 'app-todo-dashboard',
@@ -8,12 +10,14 @@ import { TicketsGQL } from '../../../graphql/graphql-types';
 })
 export class TodoDashboardComponent implements OnInit {
 
-  constructor(private ticketsGQL: TicketsGQL) { }
+  private tickets: Observable<ApolloQueryResult<TicketsByStateQuery>>;
+
+  constructor(private ticketsGQL: TicketsByStateGQL) { }
 
   ngOnInit(): void {
-    this.ticketsGQL.watch().valueChanges.subscribe(
-      tickets => console.log(tickets)
-    );
+    this.tickets = this.ticketsGQL.watch().valueChanges;
+
+    this.tickets.subscribe(result => console.log(result));
   }
 
 }

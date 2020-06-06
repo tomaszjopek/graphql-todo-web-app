@@ -28,12 +28,20 @@ export type Query = {
   __typename?: 'Query';
   /** Get all tickets */
   tickets?: Maybe<Array<Maybe<Ticket>>>;
+  /** Get tickets by state */
+  ticketsByState?: Maybe<Array<Maybe<Ticket>>>;
   /** Get ticket by id */
   ticket?: Maybe<Ticket>;
   /** Get user by id */
   user?: Maybe<User>;
   /** Get all users query */
   users?: Maybe<Array<Maybe<User>>>;
+};
+
+
+/** Query root */
+export type QueryTicketsByStateArgs = {
+  state?: Maybe<State>;
 };
 
 
@@ -48,11 +56,18 @@ export type QueryUserArgs = {
   id?: Maybe<Scalars['UUID']>;
 };
 
+export enum State {
+  Done = 'DONE',
+  InProgress = 'IN_PROGRESS',
+  Todo = 'TODO'
+}
+
 export type Ticket = {
   __typename?: 'Ticket';
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['UUID']>;
   priority?: Maybe<Priority>;
+  state?: Maybe<State>;
   title?: Maybe<Scalars['String']>;
   /** User which created ticket */
   user?: Maybe<User>;
@@ -67,23 +82,41 @@ export type User = {
 };
 
 
-export type TicketsQueryVariables = {};
+export type TicketsByStateQueryVariables = {};
 
 
-export type TicketsQuery = (
+export type TicketsByStateQuery = (
   { __typename?: 'Query' }
   & {
-  tickets?: Maybe<Array<Maybe<(
+  done?: Maybe<Array<Maybe<(
     { __typename?: 'Ticket' }
-    & Pick<Ticket, 'id'>
+    & Pick<Ticket, 'id' | 'title' | 'description'>
+    )>>>, todo?: Maybe<Array<Maybe<(
+    { __typename?: 'Ticket' }
+    & Pick<Ticket, 'id' | 'title' | 'description'>
+    )>>>, in_progress?: Maybe<Array<Maybe<(
+    { __typename?: 'Ticket' }
+    & Pick<Ticket, 'id' | 'title' | 'description'>
     )>>>
 }
   );
 
-export const TicketsDocument = gql`
-    query Tickets {
-  tickets {
+export const TicketsByStateDocument = gql`
+    query TicketsByState {
+  done: ticketsByState(state: DONE) {
     id
+    title
+    description
+  }
+  todo: ticketsByState(state: TODO) {
+    id
+    title
+    description
+  }
+  in_progress: ticketsByState(state: IN_PROGRESS) {
+    id
+    title
+    description
   }
 }
     `;
@@ -91,6 +124,7 @@ export const TicketsDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class TicketsGQL extends Apollo.Query<TicketsQuery, TicketsQueryVariables> {
-  document = TicketsDocument;
+export class TicketsByStateGQL extends Apollo.Query<TicketsByStateQuery, TicketsByStateQueryVariables> {
+  document = TicketsByStateDocument;
+
 }
